@@ -1,0 +1,7 @@
+{application, erly_date,
+[
+{description, ""},
+{vsn, git},
+{registered, []},
+{env, []}
+]}.
