@@ -16,13 +16,13 @@
 -export([datetime_conv_dt_ux/3]).
 
 -spec datetime_conv_dt_ux(Datetime::binary() | list(), Type::atom(), UTC::integer())->
-  binary() | integer().
+  tuple() | integer().
 datetime_conv_dt_ux(Datetime, Type, UTC)
   when ((is_binary(Datetime) or is_list(Datetime)) and is_atom(Type) and is_integer(UTC))->
   try
     check_conv(Datetime, Type, UTC)
   catch
-    _ : _Reason -> iolist_to_binary([<<"error, ">>, <<" expression not fit format, ">>, <<" failed source expression">>])
+    _ : _Reason -> {error, wrong_format}
   end;
 datetime_conv_dt_ux(_Datetime, _Type, _UTC) -> {error, wrong_format}.
 
@@ -48,21 +48,21 @@ get_separator(true, _Dispatcher, ListEl) ->lists:nth(3, ListEl).
 get_data(Datetime) ->
     is_separator(is_split(binary:split(to_binary(Datetime), <<" ">>))).
 
--spec is_split(list() | any()) -> list() | binary().
+-spec is_split(list() | any()) -> list() | tuple().
 is_split([Date, Time]) ->
-  Sheet         = [<<0>>,<<1>>,<<2>>,<<3>>,<<4>>,<<5>>,<<6>>,<<7>>,<<8>>,<<9>>],
+  Sheet         = [<<"0">>,<<"1">>,<<"2">>,<<"3">>,<<"4">>,<<"5">>,<<"6">>,<<"7">>,<<"8">>,<<"9">>],
   ListEl        = [ <<El>> || El <- binary_to_list(Date) ],
   Dispatcher    = lists:nth(5, ListEl),
   DispatcherEL  = get_separator(lists:member(Dispatcher, Sheet),Dispatcher, ListEl),
   [DispatcherEL, Date, Time];
-is_split([_,_]) -> iolist_to_binary([<<"error,">>, <<" failed match format,">>, <<" source expression is wrong">>]);
-is_split([_])   -> iolist_to_binary([<<"error,">>, <<" failed match format,">>, <<" source expression is wrong">>]);
-is_split(_)     -> iolist_to_binary([<<"error,">>, <<" failed match format,">>, <<" source expression is wrong">>]).
+is_split([_,_]) -> {error, wrong_format};
+is_split([_])   -> {error, wrong_format};
+is_split(_)     -> {error, wrong_format}.
 
--spec is_separator(IsPlit::list() | false) -> binary().
+-spec is_separator(IsPlit::list() | false) -> tuple().
 is_separator(IsPlit) ->
   [DispatcherEL, Date, Time]  = IsPlit,
   [H,I,S]       = binary:split(Time, <<":">>, [global]),
   [Y,M,D]       = binary:split(Date, DispatcherEL, [global]),
   {binary_to_integer(Y),binary_to_integer(M),binary_to_integer(D),binary_to_integer(H),binary_to_integer(I),binary_to_integer(S)};
-is_separator(false) -> iolist_to_binary([<<"error,">>, <<" failed match separator,">>, <<" format is wrong">>]).
+is_separator(false) -> {error, wrong_separator}.
