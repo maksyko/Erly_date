@@ -55,7 +55,6 @@ is_split([Date, Time]) ->
   Dispatcher    = lists:nth(5, ListEl),
   DispatcherEL  = get_separator(lists:member(Dispatcher, Sheet),Dispatcher, ListEl),
   [DispatcherEL, Date, Time];
-is_split([_,_]) -> {error, wrong_format};
 is_split([_])   -> {error, wrong_format};
 is_split(_)     -> {error, wrong_format}.
 
@@ -64,5 +63,4 @@ is_separator(IsPlit) ->
   [DispatcherEL, Date, Time]  = IsPlit,
   [H,I,S]       = binary:split(Time, <<":">>, [global]),
   [Y,M,D]       = binary:split(Date, DispatcherEL, [global]),
-  {binary_to_integer(Y),binary_to_integer(M),binary_to_integer(D),binary_to_integer(H),binary_to_integer(I),binary_to_integer(S)};
-is_separator(false) -> {error, wrong_separator}.
+  {binary_to_integer(Y),binary_to_integer(M),binary_to_integer(D),binary_to_integer(H),binary_to_integer(I),binary_to_integer(S)}.
