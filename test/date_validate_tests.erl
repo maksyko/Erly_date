@@ -3,4 +3,5 @@
 
 date_validate_test() ->
   true = date_validate:check_date(<<"21-10-2008">>, <<"DD-MM-YYYY">>),
-  false = date_validate:check_date(<<"21-102008">>, <<"DD-MM-YYYY">>).
+  false = date_validate:check_date(<<"21-102008">>, <<"DD-MM-YYYY">>),
+  false = date_validate:check_date(<<"2100-10-2008">>, <<"DD-MM-YYYY">>).

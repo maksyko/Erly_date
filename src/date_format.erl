@@ -16,10 +16,10 @@
 -module(date_format).
 -export([date2format/2]).
 
--spec date2format(Date::binary(), Format::binary()) -> binary() | false.
+-spec date2format(Date::binary(), Format::binary()) -> tuple() | false.
 date2format(Date, Format) when (is_binary(Date) and is_binary(Format)) ->
   date_vs_remark(format_match(Format), Format, Date);
-date2format(_Date,_Format) -> false.
+date2format(_Date,_Format) -> {error, wrong_format}.
 
 -spec is_format(List::list()) -> binary().
 is_format(List) ->
@@ -30,7 +30,7 @@ is_format(List) ->
 format_match(Format) ->
   binary:matches(Format, [<<"YYYY">>,<<"YY">>,<<"yyyy">>,<<"yy">>,<<"MM">>,<<"mm">>, <<"DD">>,<<"dd">>]).
 
--spec date_vs_remark(list(), Format::binary(), Date::binary()) -> boolean() | binary() .
+-spec date_vs_remark(list(), Format::binary(), Date::binary()) -> tuple() | binary() .
 date_vs_remark([{0,2},{3,2},{6,2}], <<_F1:16,F2:8,_F3:16,F4:8,_F5:16>>, <<D1:16,D2:8,D3:16,D4:8,D5:16>>) ->
   is_format([<<D1:16>>,<<F2:8>>,<<D3:16>>,<<F4:8>>,<<D5:16>>,D2,D4]);
 date_vs_remark([{0,2},{3,2},{6,4}],<<_F1:16,F2:8,_F3:16,F4:8,_F5:32>>, <<D1:16,D2:8,D3:16,D4:8,D5:32>>) ->
@@ -39,4 +39,4 @@ date_vs_remark([{0,2},{3,4},{8,2}],<<_F1:16,F2:8,_F3:32,F4:8,_F5:16>>, <<D1:16,D
   is_format([<<D1:16>>,<<F2:8>>,<<D3:32>>,<<F4:8>>,<<D5:16>>,D2,D4]);
 date_vs_remark([{0,4},{5,2},{8,2}], <<_F1:32,F2:8,_F3:16,F4:8,_F5:16>>, <<D1:32,D2:8,D3:16,D4:8,D5:16>>) ->
   is_format([<<D1:32>>,<<F2:8>>,<<D3:16>>,<<F4:8>>,<<D5:16>>,D2,D4]);
-date_vs_remark(_,_,_) -> false.
+date_vs_remark(_,_,_) -> {error, failed_match_format}.

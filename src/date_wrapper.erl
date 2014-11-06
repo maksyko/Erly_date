@@ -19,11 +19,11 @@
 check_date(Date, Format) ->
   date_validate:check_date(Date, Format).
 
--spec date2format(Date::binary(), Format::binary()) -> binary() | false.
+-spec date2format(Date::binary(), Format::binary()) -> binary() | tuple().
 date2format(Date, Format)->
   date_format:date2format(Date, Format).
 
 -spec datetime_conv_dt_ux(Datetime::binary() | list(), Type::atom(), UTC::integer())->
-  error | tuple() | integer().
+  tuple() | integer().
 datetime_conv_dt_ux(Datetime, Type, UTC)->
   datetime_conversion:datetime_conv_dt_ux(Datetime, Type, UTC).
