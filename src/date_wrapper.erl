@@ -24,6 +24,6 @@ date2format(Date, Format)->
   date_format:date2format(Date, Format).
 
 -spec datetime_conv_dt_ux(Datetime::binary() | list(), Type::atom(), UTC::integer())->
-  tuple() | integer().
+  binary() | integer().
 datetime_conv_dt_ux(Datetime, Type, UTC)->
   datetime_conversion:datetime_conv_dt_ux(Datetime, Type, UTC).
