@@ -9,6 +9,10 @@ This library contains useful functions to use datetime.
 Examples
 --------
 
+date_wrapper.erl:
+
+%% Wrapper datime which call datetime functions
+
 date_format.erl:
 
 .. code_block:: erlang
