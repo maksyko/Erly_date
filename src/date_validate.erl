@@ -17,9 +17,13 @@
 -export([check_date/2]).
 
 -spec check_date(Date::binary(), Format::binary()) -> boolean() .
-check_date(Date, Format) when (is_binary(Date) and is_binary(Format)) ->
-  date_vs_format(format_match(Format), Format, Date);
+check_date(Date, Format) when ((is_binary(Date) or is_list(Date)) and (is_binary(Format) or is_list(Format))) ->
+  date_vs_format(format_match(to_binary(Format)), to_binary(Format), to_binary(Date));
 check_date(_Date,_Format) -> false.
+
+-spec to_binary(Param::binary() | list()) -> binary() | list().
+to_binary(Param) when is_binary(Param) -> Param;
+to_binary(Param) when is_list(Param) -> list_to_binary(Param).
 
 -spec is_match(boolean())-> boolean() .
 is_match(true) -> true;

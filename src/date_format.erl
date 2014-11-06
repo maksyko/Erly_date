@@ -17,8 +17,8 @@
 -export([date2format/2]).
 
 -spec date2format(Date::binary() | list(), Format::binary()) -> tuple() | binary().
-date2format(Date, Format) when ((is_binary(Date) or is_list(Date)) and is_binary(Format)) ->
-  date_vs_remark(format_match(Format), Format, to_binary(Date));
+date2format(Date, Format) when ((is_binary(Date) or is_list(Date)) and (is_binary(Format) or is_list(Format))) ->
+  date_vs_remark(format_match(to_binary(Format)), to_binary(Format), to_binary(Date));
 date2format(_Date,_Format) -> {error , wrong_format}.
 
 -spec to_binary(Param::binary() | list()) -> binary() | list().
